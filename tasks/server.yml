@@ -1,0 +1,52 @@
+- name: Deploy ID File
+  template:
+    src: ids.j2
+    dest: "{{ role_dcc_path }}/ids"
+    owner: "{{ role_dcc_user }}"
+    group: "{{ role_dcc_group }}"
+  tags:
+    - install
+    - configure
+
+- name: Deploy flod File
+  template:
+    src: flod.j2
+    dest: "{{ role_dcc_path }}/flod"
+    owner: "{{ role_dcc_user }}"
+    group: "{{ role_dcc_group }}"
+  tags:
+    - install
+    - configure
+
+- name: Copy DCCD Systemd file to /etc/systemd/system/
+  template:
+    src: dccd.service.j2
+    dest: /etc/systemd/system/dccd.service
+    owner: root
+    group: root
+  tags:
+    - install
+    - configure
+
+- name: Ensure DCCD is started
+  systemd:
+    name: dccd
+    state: started
+    enabled: yes
+    masked: no
+    daemon_reload: yes
+  tags:
+    - install
+    - configure
+
+- name: Create DCC server cronjob
+  cron:
+    name: "DCCD daily cronjob"
+    special_time: daily
+    job: "{{ role_dcc_path }}/libexec/cron-dccd"
+    cron_file: dcc-dccd
+    user: "{{ role_dcc_user }}"
+    state: present
+  tags:
+    - install
+    - configure

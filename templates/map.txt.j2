@@ -1,0 +1,8 @@
+# {{ ansible_managed }}
+
+IPv6 {% if role_dcc_map_ipv6 %}on{% else %}off{% endif %}   version=3
+
+# dcc server
+{% for server in role_dcc_map_server %}
+{{ server.hostname }}    {{ server.options }}    {{ server.clientid }}   {{ server.secret }}
+{% endfor %}

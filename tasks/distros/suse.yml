@@ -1,0 +1,13 @@
+---
+
+- name: Install required packages
+  yum:
+    name:
+      - make
+      - gcc
+    state: present
+    update_cache: yes
+  when:
+    - ansible_os_family | lower == 'suse'
+  tags:
+    - install

@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+# Sample DCC server peers
+#   This file contains peers to which the local DCC server should flood
+#   reports of checksums of possible spam.  See dccd(8).
+
+# hostname,port	    rem-id [passwd-id] [out-opts] [in-opts]
+{% for peer in role_dcc_server_flod_peers %}
+#{{ peer.contact }}
+{{ peer.hostname }} {{ peer.remID }}    {{ peer.passwdID }} {{ peer.outOpts }} {{ peer.inOpts }}
+{% endfor%}

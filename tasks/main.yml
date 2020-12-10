@@ -1,0 +1,38 @@
+---
+# @meta author: dpunkturban (dennis urban)
+# @meta description: Ansible role to install and configure DCC (Distributed Checksum Clearinghouse) client and/or server
+# @meta name: Install and configure DCC (Distributed Checksum Clearinghouse)
+# @meta license:  EUPL-1.2 License
+#
+# @tag install # Should only be used for installation
+# @tag configure # Should be used for configuration changes
+
+- name: Include install tasks
+  import_tasks: install.yml
+  tags:
+    - install
+
+- name: Configure DCC
+  replace:
+    path: "{{ role_dcc_path }}/dcc_conf"
+    regexp: "^{{ item.name }}.*$"
+    replace: "{{ item.line }}"
+  with_items:
+    - "{{ role_dcc_config }}"
+  tags:
+    - install
+    - configure
+
+- name: Include client tasks
+  import_tasks: client.yml
+  when: "'dcc_client' in group_names"
+  tags:
+    - install
+    - configure
+
+- name: Include server tasks
+  import_tasks: server.yml
+  when: "'dcc_server' in group_names"
+  tags:
+    - install
+    - configure

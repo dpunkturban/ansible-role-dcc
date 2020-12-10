@@ -1,0 +1,17 @@
+---
+
+- name: restart dccifd
+  systemd:
+    name: dccifd
+    state: restarted
+  when: "'dcc_client' in group_names"
+
+- name: restart dccd
+  systemd:
+    name: dccd
+    state: restarted
+  when: "'dcc_server' in group_names"
+
+- name: make map
+  include_tasks: make_map.yml # multiple tasks aren't possible in handler
+

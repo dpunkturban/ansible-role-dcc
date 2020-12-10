@@ -1,0 +1,19 @@
+# {{ ansible_managed }}
+
+# Clients
+{% for client in role_dcc_client_ids %}
+# {{ client.name }}
+{{ client.id }} {{ client.secret }}
+{% endfor %}
+
+# Server
+{% for server in role_dcc_server_ids %}
+# {{ server.name }}
+{{ server.id }} {{ server.secret }}
+{% endfor %}
+
+# Greylist
+{% for server in role_dcc_greylist_ids %}
+# {{ server.name }}
+{{ server.id }} {{ server.secret }}
+{% endfor %}

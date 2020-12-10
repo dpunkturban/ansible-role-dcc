@@ -1,0 +1,17 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description=DCC Client (DCCD)
+Requires=network.target local-fs.target time-sync.target
+
+[Service]
+Type=forking
+PermissionsStartOnly=true
+RuntimeDirectory=dcc
+EnvironmentFile={{ role_dcc_path }}/dcc_conf
+ExecStart={{ role_dcc_path }}/libexec/dccd $DCCD_ARGS
+ExecStop={{ role_dcc_path }}/libexec/rcDCC -m dccd stop
+Nice=1
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,80 @@
+- name: Include OS specific tasks
+  include_tasks: "distros/{{ ansible_os_family | lower }}.yml"
+  tags:
+    - install
+
+- name: Create install path ({{ role_dcc_install_path }})
+  file:
+    path: "{{ role_dcc_install_path }}"
+    state: directory
+  tags:
+    - install
+
+- name: Download DCC {{ role_dcc_version }} from dcc-servers.net archive
+  get_url:
+    url: "https://www.dcc-servers.net/src/dcc/old/dcc-{{ role_dcc_version }}.tar.Z"
+    dest: "{{ role_dcc_install_path }}/{{ role_dcc_version }}.tar.Z"
+  register: role_dcc_download_status
+  when:
+    - not ansible_check_mode
+  tags:
+    - install
+
+- name: Unarchive downloaded DCC Archive
+  unarchive:
+    src: "{{ role_dcc_install_path }}/{{ role_dcc_version }}.tar.Z"
+    dest: "{{ role_dcc_install_path }}/"
+    remote_src: yes
+  when:
+    - role_dcc_download_status is changed
+    - not ansible_check_mode
+  register: role_dcc_unarchive_status
+  tags:
+    - install
+
+- name: Create bin systemuser
+  group:
+    name: bin
+    state: present
+    system: yes
+  tags:
+    - install
+
+- name: Compile DCC
+  shell: "./configure && make install"
+  args:
+    chdir: "{{ role_dcc_install_path }}/dcc-{{ role_dcc_version }}"
+  register: role_dcc_installation_status
+  when:
+    - (role_dcc_unarchive_status is changed or role_dcc_reinstall)
+    - not ansible_check_mode
+  notify:
+    - restart dccifd
+    - restart dccd
+  tags:
+    - install
+
+- name: Create DCC group
+  group:
+    name: "{{ role_dcc_group }}"
+    state: present
+  tags:
+    - install
+
+- name: Create DCC user
+  user:
+    name: "{{ role_dcc_group }}"
+    system: yes
+    createhome: no
+    home: "{{ role_dcc_path }}"
+  tags:
+    - install
+
+- name: Change ownership of installed DCC
+  file:
+    path: "{{ role_dcc_path }}"
+    owner: "{{ role_dcc_user }}"
+    group: "{{ role_dcc_group }}"
+    recurse: yes
+  tags:
+    - install

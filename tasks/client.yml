@@ -1,0 +1,53 @@
+- name: "Deploy map.txt to {{ role_dcc_path }}/map.txt"
+  template:
+    src: map.txt.j2
+    dest: "{{ role_dcc_path }}/map.txt"
+    owner: "{{ role_dcc_user }}"
+    group: "{{ role_dcc_group }}"
+  notify: make map
+  tags:
+    - install
+    - configure
+
+- name: Copy whiteclnt
+  copy:
+    src: whiteclnt
+    dest: "{{ role_dcc_path }}/whiteclnt"
+    owner: "{{ role_dcc_user }}"
+    group: "{{ role_dcc_group }}"
+  tags:
+    - install
+    - configure
+
+- name: Deploy DCCIFD systemd file to /etc/systemd/system/
+  template:
+    src: dccifd.service.j2
+    dest: /etc/systemd/system/dccifd.service
+    owner: root
+    group: root
+  tags:
+    - install
+    - configure
+
+- name: Ensure DCCIFD is started
+  systemd:
+    name: dccifd
+    state: started
+    enabled: yes
+    masked: no
+    daemon_reload: yes
+  tags:
+    - install
+    - configure
+
+- name: Create DCC client cronjob
+  cron:
+    name: "DCC fetch testmessage whitelist"
+    special_time: weekly
+    job: "{{ role_dcc_path }}/libexec/fetch-testmsg-whitelist"
+    cron_file: dcc-fetch-testmsg-whitelist
+    user: "{{ role_dcc_user }}"
+    state: present
+  tags:
+    - install
+    - configure

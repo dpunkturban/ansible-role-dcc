@@ -1,0 +1,11 @@
+- name: Delete old map
+  file:
+    path: /var/dcc/map
+    state: absent
+- name: Generate new map
+  shell: cdcc -qh /var/dcc/ 'load -' < /var/dcc/map.txt
+- name: Set correct owner for new map
+  file:
+    path: /var/dcc/map
+    owner: dcc
+    group: dcc
