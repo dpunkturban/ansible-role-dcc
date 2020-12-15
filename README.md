@@ -2,6 +2,8 @@
 
 This Ansible role can be used to install the client and/or server of the DCC. More information about DCC can be found at https://www.dcc-servers.net/dcc/.
 
+## ToDo:
+- [ ] make whiteclnt more flexible
 
 ## Tags:
 
@@ -28,7 +30,7 @@ This Ansible role can be used to install the client and/or server of the DCC. Mo
 
 * `role_dcc_config`: `""` - DCC-Config for Client and/or Server. It is possible to run server and client simultaneously. For this, the configuration of server and client must be stored in the variable and the host must be in both Ansible groups. By default, only the client configuration is installed.
 
-Example: 
+Example:
 
 Client config:
 ```yaml
@@ -43,7 +45,7 @@ Client config:
   - name: DCCIFD_LOGDIR
     line: '#DCCIFD_LOGDIR=""'
   - name: DCCIFD_ARGS
-    line: 'DCCIFD_ARGS="-SHELO -Smail_host -SSender -SList-ID -p {{ role_dcc_bind_ip }},{{ role_dcc_client_port }},{{ role_dcc_net }}"' 
+    line: 'DCCIFD_ARGS="-SHELO -Smail_host -SSender -SList-ID -p {{ role_dcc_bind_ip }},{{ role_dcc_client_port }},{{ role_dcc_net }}"'
 ```
 
 Server config (**-> Ensure that you have a server ID <-**):
@@ -62,7 +64,7 @@ Server config (**-> Ensure that you have a server ID <-**):
 ```
 * `role_dcc_map_ipv6`: `yes` - Enable/Disable IPv6
 
-### Client Config 
+### Client Config
 
 * `role_dcc_map_server`:  - Servers to be queried. By default, all public servers are requested. Public servers should only be used if less than 100,000 emails are processed per day. Please see the installation instructions for more information. If no public servers are used, a secret must also be added.
 
@@ -73,26 +75,26 @@ Public Server:
   - hostname: dcc1.dcc-servers.net
     options: "RTT+1000 ms"
     clientid: anon
-    secret: 
+    secret:
   - hostname: dcc2.dcc-servers.net
     options: "RTT+1000 ms"
     clientid: anon
-    secret: 
+    secret:
   - hostname: dcc3.dcc-servers.net
     options: "RTT+1000 ms"
     clientid: anon
-    secret: 
+    secret:
   - hostname: dcc4.dcc-servers.net
     options: "RTT+1000 ms"
     clientid: anon
-    secret: 
+    secret:
   - hostname: dcc5.dcc-servers.net
     options: "RTT+1000 ms"
     clientid: anon
     secret:
 ```
 
-### Server Config 
+### Server Config
 
 * `role_dcc_server_id`: `0000` - Unique server-ID. Steps to obtain a server-ID are described in the installation guide (see https://www.dcc-servers.net/dcc/INSTALL.html)
 
