@@ -15,19 +15,15 @@ This Ansible role can be used to install the client and/or server of the DCC. Mo
 ## Variables:
 
 * `role_dcc_greylist_ids`: `2.3.167` - Version to be installed. You can find the latest version on the website https://www.dcc-servers.net/dcc/ or on https://www.dcc-servers.net/src/dcc/old/
-
 * `role_dcc_reinstall`: `no` - Force reinstallation proccess
-
 * `role_dcc_user`: `dcc` - User under which the program should run
-
 * `role_dcc_group`: `dcc` - Group under which the program should run
-
 * `role_dcc_bind_ip`: `127.0.0.1` - Binded IP-Adress
-
 * `role_dcc_client_port`: `"11344"` - Port for external access, e.g. rSpamd
-
 * `role_dcc_net`: `"0.0.0.0/0"` - Allowed networks
-
+* `role_dcc_deb_packges:`  - Required packages for Debian based systems  
+* `role_dcc_redhat_packges:`  - Required packages for RedHat based systems 
+* `role_dcc_suse_packges:`  - Required packages for SuSe based systems   
 * `role_dcc_config`: `""` - DCC-Config for Client and/or Server. It is possible to run server and client simultaneously. For this, the configuration of server and client must be stored in the variable and the host must be in both Ansible groups. By default, only the client configuration is installed.
 
 Example:
