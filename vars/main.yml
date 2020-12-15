@@ -1,0 +1,13 @@
+---
+
+role_dcc_deb_packages:
+  - make
+  - gcc
+
+role_dcc_redhat_packages:
+  - make
+  - gcc
+
+role_dcc_suse_packages:
+  - make
+  - gcc
