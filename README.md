@@ -54,7 +54,7 @@ Server config (**-> Ensure that you have a server ID <-**):
   - name: BRAND
     line: 'BRAND={{ role_dcc_server_brand }}'
   - name: DCCD_ARGS
-    line: 'DCCD_ARGS="-i {{ role_dcc_server_id }} -n {{ role_dcc_server_brand }} -a 127.0.0.1 -a {{ ansible_default_ipv4.address }} -u FOREVER"'
+    line: 'DCCD_ARGS="-i {{ role_dcc_server_id }} -n {{ role_dcc_server_brand }} -a 127.0.0.1 -a {{ ansible_default_ipv4.address }}  -a {{ ansible_default_ipv6.address }} -u FOREVER"'
   - name: REP_ARGS
     line: 'REP_ARGS='
 ```
